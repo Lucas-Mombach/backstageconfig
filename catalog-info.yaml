@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstageconfig
+  annotations:
+    github.com/project-slug: Lucas-Mombach/backstageconfig
+spec:
+  type: other
+  lifecycle: unknown
+  owner: team-platform
