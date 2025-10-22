@@ -1,10 +1,405 @@
+# ==============================================
+# GRUPOS/TIMES
+# ==============================================
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-payments
+  description: Time de Pagamentos
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-orders
+  description: Time de Pedidos
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-logistics
+  description: Time de Logística
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-platform
+  description: Time de Plataforma
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-security
+  description: Time de Segurança
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-customer
+  description: Time de Customer
+spec:
+  type: team
+  children: []
+---
+# ==============================================
+# SISTEMAS
+# ==============================================
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: checkout-platform
+  description: Plataforma de checkout e pagamentos
+spec:
+  owner: team-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: warehouse-platform
+  description: Plataforma de logística e estoque
+spec:
+  owner: team-logistics
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: communication-platform
+  description: Plataforma de comunicação
+spec:
+  owner: team-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: security-platform
+  description: Plataforma de segurança
+spec:
+  owner: team-security
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: crm-platform
+  description: Plataforma de CRM
+spec:
+  owner: team-customer
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: infrastructure
+  description: Infraestrutura base
+spec:
+  owner: team-platform
+---
+# ==============================================
+# RECURSOS
+# ==============================================
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: message-broker
+  description: RabbitMQ para mensageria assíncrona
+spec:
+  type: message-broker
+  owner: team-platform
+  system: infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: payment-database
+  description: PostgreSQL - Dados de pagamentos
+spec:
+  type: database
+  owner: team-payments
+  system: checkout-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: order-database
+  description: PostgreSQL - Dados de pedidos
+spec:
+  type: database
+  owner: team-orders
+  system: checkout-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: inventory-database
+  description: PostgreSQL - Dados de inventário
+spec:
+  type: database
+  owner: team-logistics
+  system: warehouse-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: customer-database
+  description: PostgreSQL - Dados de clientes
+spec:
+  type: database
+  owner: team-customer
+  system: crm-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sendgrid
+  description: Serviço de envio de emails
+spec:
+  type: external-service
+  owner: team-platform
+  system: communication-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: twilio
+  description: Serviço de envio de SMS
+spec:
+  type: external-service
+  owner: team-platform
+  system: communication-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: fraud-ml-model
+  description: Modelo de ML para detecção de fraude
+spec:
+  type: ml-model
+  owner: team-security
+  system: security-platform
+---
+# ==============================================
+# APIs
+# ==============================================
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payment-api
+  description: API REST para pagamentos
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-payments
+  system: checkout-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: order-api
+  description: API REST para pedidos
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-orders
+  system: checkout-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: inventory-api
+  description: API REST para inventário
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-logistics
+  system: warehouse-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: notification-api
+  description: API REST para notificações
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-platform
+  system: communication-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: fraud-detection-api
+  description: API REST para detecção de fraude
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-security
+  system: security-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api
+  description: API REST para clientes
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-customer
+  system: crm-platform
+---
+# ==============================================
+# COMPONENTES/SERVIÇOS
+# ==============================================
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstageconfig
-  annotations:
-    github.com/project-slug: Lucas-Mombach/backstageconfig
+  name: payment-service
+  description: Processa pagamentos e transações financeiras
+  tags:
+    - aspnet-core
+    - clean-architecture
+    - critical
+  links:
+    - url: https://github.com/empresa/payment-service
+      title: Repositório
 spec:
-  type: other
-  lifecycle: unknown
+  type: service
+  lifecycle: production
+  owner: team-payments
+  system: checkout-platform
+  providesApis:
+    - payment-api
+  consumesApis:
+    - fraud-detection-api
+    - notification-api
+  dependsOn:
+    - resource:payment-database
+    - component:message-broker
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: order-service
+  description: Gerencia pedidos e carrinho de compras
+  tags:
+    - aspnet-core
+    - ddd
+spec:
+  type: service
+  lifecycle: production
+  owner: team-orders
+  system: checkout-platform
+  providesApis:
+    - order-api
+  consumesApis:
+    - payment-api
+    - inventory-api
+    - notification-api
+  dependsOn:
+    - resource:order-database
+    - component:message-broker
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: inventory-service
+  description: Controla estoque e disponibilidade de produtos
+  tags:
+    - aspnet-core
+spec:
+  type: service
+  lifecycle: production
+  owner: team-logistics
+  system: warehouse-platform
+  providesApis:
+    - inventory-api
+  consumesApis:
+    - notification-api
+  dependsOn:
+    - resource:inventory-database
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notification-service
+  description: Envia notificações (email, SMS, push)
+  tags:
+    - aspnet-core
+spec:
+  type: service
+  lifecycle: production
   owner: team-platform
+  system: communication-platform
+  providesApis:
+    - notification-api
+  dependsOn:
+    - component:message-broker
+    - resource:sendgrid
+    - resource:twilio
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fraud-detection-service
+  description: Detecta fraudes em transações
+  tags:
+    - aspnet-core
+    - ml
+    - critical
+spec:
+  type: service
+  lifecycle: production
+  owner: team-security
+  system: security-platform
+  providesApis:
+    - fraud-detection-api
+  dependsOn:
+    - resource:fraud-ml-model
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: customer-service
+  description: Gerencia dados de clientes e perfis
+  tags:
+    - aspnet-core
+spec:
+  type: service
+  lifecycle: production
+  owner: team-customer
+  system: crm-platform
+  providesApis:
+    - customer-api
+  dependsOn:
+    - resource:customer-database
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: api-gateway
+  description: Gateway de entrada para todos os serviços
+  tags:
+    - aspnet-core
+    - gateway
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: infrastructure
+  consumesApis:
+    - order-api
+    - payment-api
+    - customer-api
+    - inventory-api
